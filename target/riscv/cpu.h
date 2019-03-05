@@ -169,11 +169,28 @@ struct CPURISCVState {
     target_ulong mcause;
     target_ulong mtval;  /* since: priv-1.10.0 */
 
+    /* Hypervisor CSRs */
+    target_ulong hstatus;
+    target_ulong hedeleg;
+    target_ulong hideleg;
+    target_ulong hgatp;
+
     target_ulong scounteren;
     target_ulong mcounteren;
 
     target_ulong sscratch;
     target_ulong mscratch;
+
+    /* Background CSRs */
+    target_ulong bsstatus;
+    target_ulong bsip;
+    target_ulong bsie;
+    target_ulong bstvec;
+    target_ulong bsscratch;
+    target_ulong bsepc;
+    target_ulong bscause;
+    target_ulong bstval;
+    target_ulong bsatp;
 
     /* temporary htif regs */
     uint64_t mfromhost;
