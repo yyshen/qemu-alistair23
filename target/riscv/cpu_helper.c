@@ -86,6 +86,58 @@ bool riscv_cpu_exec_interrupt(CPUState *cs, int interrupt_request)
 
 #if !defined(CONFIG_USER_ONLY)
 
+void riscv_cpu_swap_background_regs(CPURISCVState *env)
+{
+    RISCVCPU *cpu = riscv_env_get_cpu(env);
+    target_ulong tmp;
+    target_ulong mstatus_mask = MSTATUS_MXR | MSTATUS_SUM | MSTATUS_FS |
+                                MSTATUS_SPP | MSTATUS_SPIE | MSTATUS_SIE;
+    target_ulong sie_mask = MIE_SEIE | MIE_STIE | MIE_SSIE;
+
+    g_assert(riscv_has_ext(env, RVH));
+
+#if defined(TARGET_RISCV64)
+    mstatus_mask |= MSTATUS64_UXL;
+#endif
+
+    tmp = env->bsstatus & mstatus_mask;
+    env->bsstatus = env->mstatus & mstatus_mask;
+    env->mstatus = (env->mstatus & ~mstatus_mask) | tmp;
+
+    tmp = env->bsie & sie_mask;
+    env->bsie = env->mie & sie_mask;
+    env->mie = (env->mie & ~sie_mask) | tmp;
+
+    tmp = env->bstvec;
+    env->bstvec = env->stvec;
+    env->stvec = tmp;
+
+    tmp = env->bsscratch;
+    env->bsscratch = env->sscratch;
+    env->sscratch = tmp;
+
+    tmp = env->bsepc;
+    env->bsepc = env->sepc;
+    env->sepc = tmp;
+
+    tmp = env->bscause;
+    env->bscause = env->scause;
+    env->scause = tmp;
+
+    tmp = env->bstval;
+    env->bstval = env->sbadaddr;
+    env->sbadaddr = tmp;
+
+    tmp = env->bsatp;
+    env->bsatp = env->satp;
+    env->satp = tmp;
+
+    tmp = (target_ulong)atomic_read(&env->bsip);
+    tmp = riscv_cpu_update_mip(cpu, (MIP_SSIP | MIP_STIP | MIP_SEIP), tmp);
+    tmp &= MIP_SSIP | MIP_STIP | MIP_SEIP;
+    atomic_set(&env->bsip, tmp);
+}
+
 bool riscv_cpu_virt_enabled(CPURISCVState *env)
 {
     bool tmp;
