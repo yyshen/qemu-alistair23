@@ -799,6 +799,115 @@ static int write_hgatp(CPURISCVState *env, int csrno, target_ulong val)
     return 0;
 }
 
+/* Background CSR Registers */
+static int read_bsstatus(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bsstatus;
+    return 0;
+}
+
+static int write_bsstatus(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bsstatus = val;
+    return 0;
+}
+
+static int read_bsie(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bsie;
+    return 0;
+}
+
+static int write_bsie(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bsie = val;
+    return 0;
+}
+
+static int read_bstvec(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bstvec;
+    return 0;
+}
+
+static int write_bstvec(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bstvec = val;
+    return 0;
+}
+
+static int read_bsscratch(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bsscratch;
+    return 0;
+}
+
+static int write_bsscratch(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bsscratch = val;
+    return 0;
+}
+
+static int read_bsepc(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bsepc;
+    return 0;
+}
+
+static int write_bsepc(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bsepc = val;
+    return 0;
+}
+
+static int read_bscause(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bscause;
+    return 0;
+}
+
+static int write_bscause(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bscause = val;
+    return 0;
+}
+
+static int read_bstval(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bstval;
+    return 0;
+}
+
+static int write_bstval(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bstval = val;
+    return 0;
+}
+
+static int read_bsip(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = (target_ulong)atomic_read(&env->bsip);
+    return 0;
+}
+
+static int write_bsip(CPURISCVState *env, int csrno, target_ulong val)
+{
+    atomic_set(&env->bsip, val);
+    return 0;
+}
+
+static int read_bsatp(CPURISCVState *env, int csrno, target_ulong *val)
+{
+    *val = env->bsatp;
+    return 0;
+}
+
+static int write_bsatp(CPURISCVState *env, int csrno, target_ulong val)
+{
+    env->bsatp = val;
+    return 0;
+}
+
 /* Physical Memory Protection */
 static int read_pmpcfg(CPURISCVState *env, int csrno, target_ulong *val)
 {
@@ -986,6 +1095,16 @@ static riscv_csr_operations csr_ops[CSR_TABLE_SIZE] = {
     [CSR_HEDELEG] =             { hmode,   read_hedeleg,     write_hedeleg    },
     [CSR_HIDELEG] =             { hmode,   read_hideleg,     write_hideleg    },
     [CSR_HGATP] =               { hmode,   read_hgatp,       write_hgatp      },
+
+    [CSR_BSSTATUS] =            { hmode,   read_bsstatus,    write_bsstatus   },
+    [CSR_BSIE] =                { hmode,   read_bsie,        write_bsie       },
+    [CSR_BSTVEC] =              { hmode,   read_bstvec,      write_bstvec     },
+    [CSR_BSSCRATCH] =           { hmode,   read_bsscratch,   write_bsscratch  },
+    [CSR_BSEPC] =               { hmode,   read_bsepc,       write_bsepc      },
+    [CSR_BSCAUSE] =             { hmode,   read_bscause,     write_bscause    },
+    [CSR_BSTVAL] =              { hmode,   read_bstval,      write_bstval     },
+    [CSR_BSIP] =                { hmode,   read_bsip,        write_bsip       },
+    [CSR_BSATP] =               { hmode,   read_bsatp,       write_bsatp      },
 
     /* Physical Memory Protection */
     [CSR_PMPCFG0  ... CSR_PMPADDR9] =  { pmp,   read_pmpcfg,  write_pmpcfg   },

@@ -169,6 +169,17 @@
 #define CSR_SPTBR           0x180
 #define CSR_SATP            0x180
 
+/* Background CSRs */
+#define CSR_BSSTATUS        0x200
+#define CSR_BSIE            0x204
+#define CSR_BSTVEC          0x205
+#define CSR_BSSCRATCH       0x240
+#define CSR_BSEPC           0x241
+#define CSR_BSCAUSE         0x242
+#define CSR_BSTVAL          0x243
+#define CSR_BSIP            0x244
+#define CSR_BSATP           0x280
+
 /* Physical Memory Protection */
 #define CSR_PMPCFG0         0x3a0
 #define CSR_PMPCFG1         0x3a1
