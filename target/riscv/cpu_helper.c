@@ -117,6 +117,16 @@ void riscv_cpu_set_force_hs_excep(CPURISCVState *env, bool enable)
     env->virt |= enable << FORCE_HS_EXCEP_SHIFT;
 }
 
+/* Return true is floating point support is currently enabled */
+bool riscv_cpu_fp_enabled(CPURISCVState *env)
+{
+    if (env->mstatus & MSTATUS_FS) {
+        return true;
+    }
+
+    return false;
+}
+
 int riscv_cpu_claim_interrupts(RISCVCPU *cpu, uint32_t interrupts)
 {
     CPURISCVState *env = &cpu->env;
