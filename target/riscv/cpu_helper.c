@@ -193,6 +193,9 @@ void riscv_cpu_set_force_hs_excep(CPURISCVState *env, bool enable)
 bool riscv_cpu_fp_enabled(CPURISCVState *env)
 {
     if (env->mstatus & MSTATUS_FS) {
+        if (riscv_cpu_virt_enabled(env) && !(env->bsstatus & MSTATUS_FS)) {
+            return false;
+        }
         return true;
     }
 
