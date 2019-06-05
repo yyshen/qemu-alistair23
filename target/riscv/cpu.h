@@ -124,6 +124,10 @@ struct CPURISCVState {
     target_ulong mhartid;
     target_ulong mstatus;
 
+#ifdef TARGET_RISCV32
+    target_ulong mstatush;
+#endif
+
     /*
      * CAUTION! Unlike the rest of this struct, mip is accessed asynchonously
      * by I/O threads. It should be read with atomic_read. It should be updated
